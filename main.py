@@ -1,9 +1,11 @@
 import os
 import html
 import time
-import speech_recognition as sr
+import numpy as np
 from google.cloud import translate_v2 as translate
 from gtts import gTTS
+import sounddevice as sd
+import speech_recognition as sr  
 
 # Configurez la variable d'environnement pour Google Cloud
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './credentials.json'
@@ -32,13 +34,11 @@ def speak_text(text, language='fr'):
     os.system("mpg123 translation.mp3")
 
 def transcribe_audio():
-    # Initialisez le recognizer
-    recognizer = sr.Recognizer()
-
+    recognizer = sr.Recognizer()  # Déclarez 'recognizer' ici
     # Capturez l'audio depuis le microphone
     with sr.Microphone() as source:
         print("Dites quelque chose...")
-        audio = recognizer.listen(source)
+        audio = recognizer.listen(source)  
 
     try:
         # Reconnaître la parole en utilisant la reconnaissance vocale de Google
@@ -54,6 +54,7 @@ def transcribe_audio():
 
 # Fonction principale qui traduit, parle et transcrit le texte en continu
 def translate_speak_transcribe():
+    recognizer = sr.Recognizer()  # Déclarez 'recognizer' ici
     while True:
         # Transcrire l'audio
         transcribed_text = transcribe_audio()
@@ -65,8 +66,7 @@ def translate_speak_transcribe():
             # Parler le texte traduit
             speak_text(translated_text)
 
-            # Pause pendant quelques minutes avant de reprendre l'écoute
-            time.sleep(0)  # Attendre 5 minutes (300 secondes)
-
 # Exemple d'utilisation
 translate_speak_transcribe()
+
+
